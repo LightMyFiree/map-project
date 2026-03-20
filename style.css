@@ -25,7 +25,6 @@
   --filter-wrapper-border: rgba(255, 255, 255, 0.5);
   --filter-btn-hover-bg: rgba(255, 255, 255, 0.5);
   
-  /* Новые переменные для контраста фильтров */
   --filter-btn-active-bg: white;
   --filter-btn-active-color: var(--primary);
   
@@ -43,15 +42,14 @@
 
 /* Тёмная тема */
 [data-theme="dark"] {
-  --bg-color: #020617; /* Глубокий тёмный фон */
-  --primary: #6366f1; /* Более насыщенный синий для акцентов */
+  --bg-color: #020617;
+  --primary: #6366f1;
   --primary-hover: #4f46e5;
   --primary-glow: rgba(99, 102, 241, 0.25);
   
-  /* Делаем панели реально тёмными, как тонированное стекло */
   --bg-glass-gradient: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(2, 6, 23, 0.4) 100%);
   --bg-glass-solid: rgba(15, 23, 42, 0.85);
-  --border-glass: rgba(255, 255, 255, 0.05); /* Едва заметная рамка */
+  --border-glass: rgba(255, 255, 255, 0.05);
   --border-glass-light: rgba(255, 255, 255, 0.1);
   
   --shadow-glass: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
@@ -59,17 +57,16 @@
   
   --text-main: #f8fafc;
   --text-inverse: #0f172a;
-  --text-muted: #cbd5e1; /* Высветлили серый, чтобы читался на тёмном фоне */
+  --text-muted: #cbd5e1;
   --title-gradient: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
   
-  --btn-glass-bg: rgba(255, 255, 255, 0.05); /* Кнопки стали аккуратнее */
+  --btn-glass-bg: rgba(255, 255, 255, 0.05);
   --btn-glass-hover: rgba(255, 255, 255, 0.1);
   
   --filter-wrapper-bg: rgba(0, 0, 0, 0.2);
   --filter-wrapper-border: rgba(255, 255, 255, 0.08);
   --filter-btn-hover-bg: rgba(255, 255, 255, 0.1);
   
-  /* В тёмной теме активный фильтр будет с синим фоном и белым текстом */
   --filter-btn-active-bg: var(--primary);
   --filter-btn-active-color: #ffffff;
   
@@ -159,7 +156,6 @@ body, html {
 .filter-btn:hover { color: var(--text-main); background: var(--filter-btn-hover-bg); }
 .filter-btn:active { transform: scale(0.96); }
 
-/* Идеальный контраст для активного фильтра */
 .filter-btn.is-active { 
   background: var(--filter-btn-active-bg); 
   color: var(--filter-btn-active-color); 
@@ -242,7 +238,7 @@ body, html {
 .cancel-route-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 16px; padding: 14px; background: #e11d48; color: white; border: none; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: var(--transition); box-shadow: 0 6px 20px rgba(225, 29, 72, 0.25); }
 .cancel-route-btn:hover { background: #be123c; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(225, 29, 72, 0.35); }
 
-/* Адаптация */
+/* ПРАВИЛЬНАЯ АДАПТАЦИЯ (КАК В ВЕРСИИ ДЛЯ ПК) */
 @media (max-width: 1024px) {
   .main-header { padding: 16px 20px; top: 16px; left: 16px; right: 16px; width: auto; max-width: none; }
   .title { font-size: 1.4rem; }
@@ -250,22 +246,34 @@ body, html {
 }
 
 @media (max-width: 768px) {
-  /* Шапка сайта */
+  /* Шапка становится компактной, но сохраняет стиль плавающей карточки */
   .main-header { 
     flex-direction: column; 
     align-items: flex-start; 
-    gap: 16px; 
-    padding: 16px; 
-    border-radius: 24px; 
+    gap: 12px; 
+    padding: 12px 16px; 
+    border-radius: 20px; 
     top: 12px; 
     left: 12px; 
     right: 12px; 
+    z-index: 10;
   }
   
-  .title { font-size: 1.3rem; }
-  .subtitle { font-size: 0.85rem; }
+  .title { font-size: 1.25rem; max-width: 85%; }
+  
+  /* Скрываем подзаголовок на мобильных устройствах для экономии места */
+  .subtitle { display: none; }
 
-  /* Блок кнопок в шапке */
+  /* Перемещаем кнопку темы в правый верхний угол шапки */
+  .theme-toggle-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+
   .header-actions { 
     width: 100%; 
     display: flex; 
@@ -273,10 +281,10 @@ body, html {
     align-items: center; 
   }
   
-  /* Фильтры с горизонтальной прокруткой */
+  /* Фильтры с горизонтальной прокруткой без переноса строк */
   .filters-wrapper { 
     flex-grow: 1; 
-    width: auto; 
+    width: 100%; 
     flex-wrap: nowrap; 
     overflow-x: auto; 
     -webkit-overflow-scrolling: touch; 
@@ -284,81 +292,99 @@ body, html {
     background: transparent; 
     border: none; 
     padding: 0; 
+    gap: 8px;
   }
   .filters-wrapper::-webkit-scrollbar { display: none; }
-  .filter-btn { flex-shrink: 0; background: var(--btn-glass-bg); border: 1px solid var(--border-glass-light); }
+  .filter-btn { 
+    flex-shrink: 0; 
+    background: var(--btn-glass-bg); 
+    border: 1px solid var(--border-glass-light);
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
   .filter-btn.is-active { background: var(--filter-btn-active-bg); }
   
-  .theme-toggle-btn { width: 44px; height: 44px; font-size: 1.2rem; }
-
-  /* Смещаем кнопки зума самой карты Leaflet под шапку */
+  /* Кнопки зума самой карты Leaflet сдвигаем под компактную шапку */
   .leaflet-top.leaflet-right {
-    top: 160px !important; 
+    top: 100px !important; 
     right: 12px !important;
   }
 
-  /* Статус-бар теперь точно над свернутой нижней панелью инструментов */
+  /* Статус-бар смещаем вниз и влево, чтобы не перекрывать панель инструментов */
   .status-bar { 
     position: absolute; 
     left: 12px; 
-    bottom: 96px; /* 80px (высота свернутой панели) + 16px отступ */
+    bottom: 12px;
     width: max-content; 
-    max-width: calc(100vw - 24px); /* Защита от выхода за экран */
+    max-width: calc(100vw - 84px); /* Чтобы не наезжать на свернутую GIS панель */
+    padding: 8px 16px;
+    font-size: 0.85rem;
     margin: 0; 
-    z-index: 1000; 
-    animation: slideInRight 0.5s; 
+    z-index: 5; 
   }
 
-  /* Нижняя выезжающая панель инструментов (GIS tools) */
+  /* Нижняя панель инструментов теперь плавает в углу (как на ПК) */
   .gis-tools { 
-    position: fixed; 
-    right: 0; 
-    bottom: 0; 
-    left: 0; 
-    width: 100%; 
-    max-height: 75vh; 
-    border-radius: 32px 32px 0 0; 
-    padding: 16px 20px 32px 20px; 
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.15); 
-    border-bottom: none; 
-    border-left: none; 
-    border-right: none; 
-    background: var(--bg-glass-solid); 
-    z-index: 2000; 
+    position: absolute; 
+    right: 12px; 
+    bottom: 12px; 
+    left: auto; 
+    width: 280px; 
+    max-height: 60vh; 
+    border-radius: 24px; 
+    padding: 20px; 
+    box-shadow: var(--shadow-float); 
+    z-index: 20; 
   }
   
-  .drag-handle { 
-    display: block; 
-    width: 48px; 
-    height: 6px; 
-    background: var(--text-muted); 
-    opacity: 0.5; 
-    border-radius: 10px; 
-    margin: 0 auto 16px auto; 
-  }
+  .drag-handle { display: none !important; } /* Убираем ползунок, так как это больше не нижняя шторка */
   
   .gis-tools.collapsed { 
-    height: 80px; 
-    padding: 12px 20px; 
+    width: 56px; 
+    height: 56px; 
+    padding: 0; 
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .gis-tools.collapsed .drag-handle { margin-top: 8px; }
-  .gis-tools.collapsed .tools-header { justify-content: center; opacity: 1; }
-  .gis-tools.collapsed .tools-title span { display: block; opacity: 1; font-size: 1.15rem; }
-  .gis-tools.collapsed .tools-title i { display: none; }
-  .toggle-tools-btn { display: none !important; }
+  
+  .gis-tools.collapsed .tools-title span,
+  .gis-tools.collapsed .tools-header { 
+    display: none; 
+  }
+  
+  /* В свернутом состоянии показываем иконку по центру */
+  .gis-tools.collapsed .tools-title i {
+    display: block !important;
+    margin: 0;
+    font-size: 1.5rem;
+    opacity: 1;
+  }
 
   /* Адаптация плашек маршрутизатора */
   .leaflet-routing-container { 
     margin: 12px !important; 
-    margin-top: 170px !important; 
-    max-height: 35vh !important; 
+    margin-top: 110px !important; 
+    max-height: 35vh !important;
+    max-width: calc(100vw - 24px) !important;
     overflow-y: auto;
   }
   
-  /* Делаем попап (карточку объекта) компактнее */
+  /* Компактный попап (карточка объекта) с урезанием длинного текста */
   .leaflet-popup-content { width: 260px !important; }
   .popup-image-wrap { height: 140px; }
   .popup-body { padding: 16px; }
-  .popup-body h3 { font-size: 1.2rem; }
-  .popup-desc { font-size: 0.85rem; margin-bottom: 16px; }
+  .popup-body h3 { font-size: 1.15rem; }
+  .popup-meta { margin-bottom: 12px; }
+  .popup-desc { 
+    font-size: 0.85rem; 
+    margin-bottom: 16px;
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .route-btn { padding: 12px; font-size: 0.9rem; }
 }

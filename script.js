@@ -81,7 +81,9 @@ function bindPopupRouteAction(marker, feature) {
     const isMobile = window.innerWidth <= 768;
     const currentZoom = map.getZoom() > 12 ? map.getZoom() : 13;
     const projectedPoint = map.project(marker.getLatLng(), currentZoom);
-    projectedPoint.y -= isMobile ? 50 : 180; 
+    
+    // Смещение окна на мобильных уменьшено, так как убрана огромная нижняя шторка
+    projectedPoint.y -= isMobile ? 80 : 180; 
     map.flyTo(map.unproject(projectedPoint, currentZoom), currentZoom, { duration: 0.8, easeLinearity: 0.25 });
 
     const button = event.popup.getElement()?.querySelector(".route-btn");
@@ -100,9 +102,15 @@ function addFeatureToLayers(feature) {
   if (!categoryLayers.has(category)) categoryLayers.set(category, L.layerGroup());
   const [lng, lat] = feature.geometry.coordinates;
 
+  const isMobile = window.innerWidth <= 768;
+
   const marker = L.marker([lat, lng], { icon: createCustomMarker(category) })
     .bindTooltip(feature.properties?.name || "Объект", { direction: "top", offset: [0, -24], className: 'custom-tooltip' })
-    .bindPopup(popupHtml(feature.properties || {}), { autoPanPaddingTopLeft: [24, 24], autoPanPaddingBottomRight: [24, window.innerWidth <= 768 ? 200 : 24] });
+    // Адаптивные отступы под плавающие элементы
+    .bindPopup(popupHtml(feature.properties || {}), { 
+      autoPanPaddingTopLeft: [24, isMobile ? 110 : 24], 
+      autoPanPaddingBottomRight: [24, isMobile ? 80 : 24] 
+    });
 
   bindPopupRouteAction(marker, feature);
   categoryLayers.get(category).addLayer(marker);
@@ -138,7 +146,6 @@ function createFilters() {
     const button = document.createElement("button");
     button.type = "button"; button.dataset.category = category; button.className = "filter-btn";
     const config = categoryConfig[category] || categoryConfig.other;
-    // Используем жирные иконки для фильтров для лучшей читаемости
     button.innerHTML = `<i class="ph-bold ${config.icon}"></i> ${config.label}`;
     button.addEventListener("click", () => {
       currentCategory = category; renderByCategory(currentCategory); setActiveButton(currentCategory);
@@ -289,7 +296,6 @@ themeToggleBtn?.addEventListener("click", () => {
   }
 });
 
-// Идеальная логика панели: свернуть по клику на крестик, развернуть по клику на любую часть свернутой панели
 toggleToolsBtn?.addEventListener("click", (e) => {
   e.stopPropagation();
   toolsPanel?.classList.add("collapsed");
