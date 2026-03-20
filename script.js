@@ -340,11 +340,34 @@ async function buildRouteTo(feature) {
 
   const routingContainer = document.querySelector('.leaflet-routing-container');
   if (routingContainer) {
+    const btnWrapper = document.createElement("div");
+    btnWrapper.className = "route-actions-wrapper";
+
+    const yandexBtn = document.createElement("button");
+    yandexBtn.className = "yandex-route-btn";
+    yandexBtn.innerHTML = '<i class="ph-bold ph-navigation-arrow"></i> Открыть в Яндекс Картах';
+    yandexBtn.onclick = () => {
+      const appUrl = `yandexmaps://build_route_on_map?lat_to=${destination.lat}&lon_to=${destination.lng}`;
+      const webUrl = `https://yandex.ru/maps/?rtext=~${destination.lat},${destination.lng}&rtt=auto`;
+      const startTime = Date.now();
+      window.location.href = appUrl;
+
+      setTimeout(() => {
+        if (Date.now() - startTime < 700) {
+          setStatus("Приложение не найдено. Открываем веб-версию...");
+          window.open(webUrl, "_blank");
+        }
+      }, 500);
+    };
+
     const cancelBtn = document.createElement('button');
     cancelBtn.className = 'cancel-route-btn';
     cancelBtn.innerHTML = '<i class="ph-bold ph-x-circle"></i> Отменить маршрут';
     cancelBtn.onclick = clearRoutes;
-    routingContainer.prepend(cancelBtn); 
+
+    btnWrapper.appendChild(yandexBtn);
+    btnWrapper.appendChild(cancelBtn);
+    routingContainer.prepend(btnWrapper);
   }
 
   routingControl.on("routesfound", function (e) {
