@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Интерактивная карта природных объектов</title>
+
+    <script>
+      if (
+        localStorage.getItem("theme") === "dark" ||
+        (!localStorage.getItem("theme") &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="map" class="map" aria-label="Интерактивная карта"></div>
+
+    <div class="ambient-light light-1"></div>
+    <div class="ambient-light light-2"></div>
+
+    <main class="ui-layer">
+      <header class="glass-panel main-header fade-in-down">
+        <div class="title-wrap">
+          <h1 class="title">Карта природных объектов</h1>
+          <p class="subtitle">Исследуйте интересные места и прокладывайте маршрут</p>
+        </div>
+        <div class="header-actions">
+          <div class="filters-wrapper" id="filters" aria-label="Фильтры категорий"></div>
+          <button id="theme-toggle" class="glass-btn theme-toggle-btn" aria-label="Переключить тему">
+            <i class="ph-bold ph-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <div id="gis-tools" class="glass-panel gis-tools collapsed slide-in-right">
+        <div class="drag-handle"></div> 
+        <div class="tools-header">
+          <div class="tools-title">
+            <i class="ph-fill ph-database"></i>
+            <span>Данные (SHP / KML)</span>
+          </div>
+          <button id="toggle-tools-btn" class="toggle-tools-btn glass-btn" type="button" aria-expanded="false">
+            <i class="ph ph-caret-up"></i>
+          </button>
+        </div>
+        
+        <div class="tools-content">
+          <div class="gis-section">
+            <h4>Импорт</h4>
+            <input type="file" id="import-file" accept=".zip,.kml" hidden />
+            <button id="import-btn" class="action-btn primary-btn">
+              <i class="ph-bold ph-upload-simple"></i> Загрузить файл
+            </button>
+            <button id="clear-pts-btn" class="action-btn danger-outline">
+              <i class="ph-bold ph-trash"></i> Удалить точки
+            </button>
+          </div>
+
+          <div class="gis-section">
+            <h4>Экспорт объектов</h4>
+            <div class="btn-row">
+              <button id="export-pts-shp" class="action-btn glass-btn"><i class="ph-fill ph-file-zip"></i> SHP</button>
+              <button id="export-pts-kml" class="action-btn glass-btn"><i class="ph-fill ph-file-code"></i> KML</button>
+            </div>
+          </div>
+
+          <div class="gis-section">
+            <h4>Экспорт маршрута</h4>
+            <div class="btn-row">
+              <button id="export-rt-shp" class="action-btn glass-btn"><i class="ph-fill ph-file-zip"></i> SHP</button>
+              <button id="export-rt-kml" class="action-btn glass-btn"><i class="ph-fill ph-file-code"></i> KML</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-panel status-bar fade-in-up">
+        <span id="status-text" class="status-text" aria-live="polite">Система готова к работе</span>
+      </div>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
+    <script src="https://unpkg.com/@mapbox/shp-write@0.4.3/shpwrite.js"></script>
+    <script src="https://unpkg.com/@tmcw/togeojson@5.8.1/dist/togeojson.umd.js"></script>
+    <script src="https://unpkg.com/tokml@0.4.0/tokml.js"></script>
+    
+    <script src="./script.js" type="module"></script>
+  </body>
+</html>

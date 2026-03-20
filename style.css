@@ -1,0 +1,276 @@
+:root {
+  /* Светлая тема */
+  --bg-color: #e2e8f0;
+  --primary: #5c67f2;
+  --primary-hover: #4f58d3;
+  --primary-glow: rgba(92, 103, 242, 0.35);
+  
+  --bg-glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.35) 100%);
+  --bg-glass-solid: rgba(255, 255, 255, 0.9);
+  --border-glass: rgba(255, 255, 255, 0.4);
+  --border-glass-light: rgba(255, 255, 255, 0.8);
+  
+  --shadow-glass: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+  --shadow-float: 0 20px 50px -15px rgba(0, 0, 0, 0.15);
+  
+  --text-main: #1e293b;
+  --text-inverse: #ffffff;
+  --text-muted: #64748b;
+  --title-gradient: linear-gradient(135deg, #0f172a 0%, #475569 100%);
+  
+  --btn-glass-bg: rgba(255, 255, 255, 0.5);
+  --btn-glass-hover: rgba(255, 255, 255, 0.95);
+  
+  --filter-wrapper-bg: rgba(255, 255, 255, 0.3);
+  --filter-wrapper-border: rgba(255, 255, 255, 0.5);
+  --filter-btn-hover-bg: rgba(255, 255, 255, 0.5);
+  
+  /* Новые переменные для контраста фильтров */
+  --filter-btn-active-bg: white;
+  --filter-btn-active-color: var(--primary);
+  
+  --popup-desc-color: #334155;
+  
+  --ambient-1: var(--primary-glow);
+  --ambient-2: rgba(56, 189, 248, 0.3);
+  
+  /* Константы */
+  --radius: 28px;
+  --radius-sm: 16px;
+  --blur: blur(28px) saturate(180%);
+  --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Тёмная тема */
+[data-theme="dark"] {
+  --bg-color: #020617; /* Глубокий тёмный фон */
+  --primary: #6366f1; /* Более насыщенный синий для акцентов */
+  --primary-hover: #4f46e5;
+  --primary-glow: rgba(99, 102, 241, 0.25);
+  
+  /* Делаем панели реально тёмными, как тонированное стекло */
+  --bg-glass-gradient: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(2, 6, 23, 0.4) 100%);
+  --bg-glass-solid: rgba(15, 23, 42, 0.85);
+  --border-glass: rgba(255, 255, 255, 0.05); /* Едва заметная рамка */
+  --border-glass-light: rgba(255, 255, 255, 0.1);
+  
+  --shadow-glass: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+  --shadow-float: 0 20px 50px -15px rgba(0, 0, 0, 0.6);
+  
+  --text-main: #f8fafc;
+  --text-inverse: #0f172a;
+  --text-muted: #cbd5e1; /* Высветлили серый, чтобы читался на тёмном фоне */
+  --title-gradient: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+  
+  --btn-glass-bg: rgba(255, 255, 255, 0.05); /* Кнопки стали аккуратнее */
+  --btn-glass-hover: rgba(255, 255, 255, 0.1);
+  
+  --filter-wrapper-bg: rgba(0, 0, 0, 0.2);
+  --filter-wrapper-border: rgba(255, 255, 255, 0.08);
+  --filter-btn-hover-bg: rgba(255, 255, 255, 0.1);
+  
+  /* В тёмной теме активный фильтр будет с синим фоном и белым текстом */
+  --filter-btn-active-bg: var(--primary);
+  --filter-btn-active-color: #ffffff;
+  
+  --popup-desc-color: #94a3b8;
+  
+  --ambient-1: rgba(99, 102, 241, 0.15);
+  --ambient-2: rgba(14, 165, 233, 0.1);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+
+body, html {
+  margin: 0; padding: 0; width: 100%; height: 100%;
+  font-family: 'Outfit', -apple-system, sans-serif;
+  overflow: hidden; color: var(--text-main);
+  background: var(--bg-color);
+  transition: background-color 0.4s ease;
+}
+
+.map { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+
+.ambient-light { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; z-index: 2; pointer-events: none; transition: background 0.4s ease; }
+.light-1 { top: -100px; left: -100px; width: 400px; height: 400px; background: var(--ambient-1); }
+.light-2 { bottom: -100px; right: -100px; width: 400px; height: 400px; background: var(--ambient-2); }
+
+.ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; pointer-events: none; display: flex; flex-direction: column; }
+
+.glass-panel {
+  background: var(--bg-glass-gradient);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border-glass);
+  border-top: 1px solid var(--border-glass-light);
+  border-left: 1px solid var(--border-glass-light);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-glass); pointer-events: auto;
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.glass-btn {
+  background: var(--btn-glass-bg); backdrop-filter: blur(10px);
+  border: 1px solid var(--border-glass-light); box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  color: var(--text-main); transition: var(--transition);
+}
+.glass-btn:hover { background: var(--btn-glass-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+
+.fade-in-down { animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide-in-right { animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+
+.main-header {
+  position: absolute; top: 20px; left: 20px; right: 20px;
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+  padding: 16px 24px; gap: 20px; max-width: 1400px; margin: 0 auto;
+}
+
+.header-actions { display: flex; align-items: center; gap: 16px; }
+
+.theme-toggle-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; cursor: pointer; flex-shrink: 0; padding: 0;
+}
+
+.title-wrap { display: flex; flex-direction: column; gap: 2px; }
+.title { 
+  margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; 
+  background: var(--title-gradient); 
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; 
+}
+.subtitle { margin: 0; font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+
+.filters-wrapper {
+  background: var(--filter-wrapper-bg); border-radius: 999px;
+  padding: 6px; display: flex; gap: 4px; flex-wrap: wrap; align-items: center;
+  border: 1px solid var(--filter-wrapper-border); transition: var(--transition);
+}
+.filter-btn {
+  background: transparent; border: none; border-radius: 999px;
+  padding: 10px 18px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted);
+  cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px;
+}
+.filter-btn i { font-size: 1.2rem; transition: var(--transition); }
+.filter-btn:hover { color: var(--text-main); background: var(--filter-btn-hover-bg); }
+.filter-btn:active { transform: scale(0.96); }
+
+/* Идеальный контраст для активного фильтра */
+.filter-btn.is-active { 
+  background: var(--filter-btn-active-bg); 
+  color: var(--filter-btn-active-color); 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+}
+
+.gis-tools {
+  position: absolute; right: 20px; bottom: 20px; display: flex; flex-direction: column;
+  padding: 24px; width: 320px; max-height: calc(100vh - 140px); overflow-y: auto;
+  transition: var(--transition); border-radius: var(--radius);
+}
+
+.drag-handle { display: none; }
+
+.tools-header { display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 1rem; }
+.tools-title { display: flex; align-items: center; gap: 10px; }
+.tools-title i { font-size: 1.4rem; color: var(--primary); }
+
+.toggle-tools-btn { width: 36px; height: 36px; border-radius: 12px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: var(--transition); color: var(--text-main); }
+.gis-tools.collapsed { width: 84px; height: 84px; padding: 24px; overflow: hidden; cursor: pointer; border-radius: 42px; background: var(--bg-glass-solid); }
+.gis-tools.collapsed .tools-content, .gis-tools.collapsed .tools-title span { opacity: 0; pointer-events: none; display: none; }
+.gis-tools.collapsed .toggle-tools-btn { display: none; }
+.gis-tools.collapsed .tools-header { justify-content: center; width: 100%; height: 100%; }
+
+.tools-content { display: flex; flex-direction: column; gap: 28px; margin-top: 24px; }
+
+.gis-section { display: flex; flex-direction: column; gap: 16px; }
+.gis-section h4 { margin: 0; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 800; opacity: 0.8; }
+
+.btn-row { display: flex; gap: 10px; }
+.action-btn { display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: var(--radius-sm); padding: 14px; font-weight: 600; cursor: pointer; font-size: 0.9rem; width: 100%; transition: var(--transition); font-family: inherit; border: none; }
+.action-btn:active { transform: scale(0.96); }
+
+.primary-btn { background: var(--primary); color: white; box-shadow: 0 8px 20px var(--primary-glow); }
+.primary-btn:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 10px 25px var(--primary-glow); }
+
+.danger-outline { color: #e11d48; background: rgba(225, 29, 72, 0.08); border: 1px solid rgba(225, 29, 72, 0.2); }
+.danger-outline:hover { background: #e11d48; color: white; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(225, 29, 72, 0.3); border-color: transparent; }
+
+.status-bar { position: absolute; left: 20px; bottom: 20px; padding: 12px 24px; font-size: 0.95rem; font-weight: 600; border-radius: 999px; background: var(--bg-glass-solid); backdrop-filter: var(--blur); }
+.status-text { display: flex; align-items: center; gap: 8px; }
+.status-bar i { font-size: 1.3rem; color: var(--primary); display: flex; align-items: center; }
+
+/* Маркеры */
+.custom-marker { position: relative; display: flex; align-items: center; justify-content: center; animation: markerPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.marker-pin { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.15), inset 0 -3px 0 rgba(0,0,0,0.1); z-index: 2; border: 3px solid var(--bg-glass-solid); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.4s, border-color 0.4s; }
+.custom-marker:hover .marker-pin { transform: scale(1.15) translateY(-6px); }
+.marker-pulse { position: absolute; width: 100%; height: 100%; background: inherit; border-radius: 50%; z-index: 1; animation: pulse 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+
+@keyframes markerPop { 0% { transform: scale(0) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+@keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 70% { transform: scale(2.5); opacity: 0; } 100% { transform: scale(2.5); opacity: 0; } }
+
+/* Всплывающие окна */
+.leaflet-popup-content-wrapper { background: var(--bg-glass-solid); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur); border: 1px solid var(--border-glass-light); border-radius: 24px; box-shadow: var(--shadow-float); padding: 0; overflow: hidden; color: var(--text-main); }
+.leaflet-popup-content { margin: 0; width: 320px !important; }
+.leaflet-popup-tip-container { display: none; }
+.leaflet-popup { margin-bottom: 24px; transition: transform 0.2s; }
+.leaflet-popup-close-button { color: var(--text-muted) !important; text-decoration: none; padding: 12px !important; z-index: 10; }
+.leaflet-popup-close-button:hover { color: var(--text-main) !important; background: transparent !important; }
+
+.popup-card { display: flex; flex-direction: column; }
+.popup-image-wrap { position: relative; width: 100%; height: 180px; overflow: hidden; }
+.popup-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1); }
+.popup-card:hover .popup-image { transform: scale(1.08); }
+.popup-image-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+.popup-body { padding: 24px; position: relative; }
+.popup-body h3 { margin: 0 0 10px 0; font-size: 1.35rem; font-weight: 800; letter-spacing: -0.5px; }
+.popup-meta { font-size: 0.85rem; color: var(--text-muted); margin: 0 0 16px 0; display: flex; justify-content: space-between; font-weight: 600; }
+.popup-meta i { font-size: 1.1rem; vertical-align: middle; margin-right: 4px; color: var(--primary); }
+.popup-desc { font-size: 0.95rem; line-height: 1.6; margin: 0 0 24px 0; color: var(--popup-desc-color); }
+.route-btn { width: 100%; background: var(--text-main); color: var(--text-inverse); border: none; border-radius: var(--radius-sm); padding: 16px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+.route-btn:hover { background: var(--text-muted); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); }
+.route-btn:active { transform: scale(0.96); }
+
+/* Routing Machine */
+.leaflet-routing-container { background: var(--bg-glass-solid) !important; backdrop-filter: var(--blur) !important; border-radius: var(--radius) !important; border: 1px solid var(--border-glass-light) !important; box-shadow: var(--shadow-float) !important; margin-right: 20px !important; margin-top: 100px !important; font-family: 'Outfit', sans-serif !important; padding-bottom: 10px; color: var(--text-main); }
+.leaflet-routing-alt h2 { font-size: 1.1rem !important; font-weight: 700 !important; color: var(--text-main) !important; }
+.leaflet-routing-alt h3 { color: var(--text-muted) !important; }
+.leaflet-routing-alt { color: var(--popup-desc-color) !important; }
+.cancel-route-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 16px; padding: 14px; background: #e11d48; color: white; border: none; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: var(--transition); box-shadow: 0 6px 20px rgba(225, 29, 72, 0.25); }
+.cancel-route-btn:hover { background: #be123c; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(225, 29, 72, 0.35); }
+
+/* Адаптация */
+@media (max-width: 1024px) {
+  .main-header { padding: 16px 20px; top: 16px; left: 16px; right: 16px; width: auto; max-width: none; }
+  .title { font-size: 1.4rem; }
+  .gis-tools { width: 300px; }
+}
+
+@media (max-width: 768px) {
+  .main-header { flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px; border-radius: 24px; top: 12px; left: 12px; right: 12px; }
+  
+  .header-actions { width: 100%; display: flex; gap: 12px; align-items: center; }
+  .filters-wrapper { flex-grow: 1; width: auto; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; background: transparent; border: none; padding: 0; }
+  .filters-wrapper::-webkit-scrollbar { display: none; }
+  .filter-btn { flex-shrink: 0; background: var(--btn-glass-bg); border: 1px solid var(--border-glass-light); }
+  .filter-btn.is-active { background: var(--filter-btn-active-bg); }
+  .theme-toggle-btn { width: 44px; height: 44px; font-size: 1.2rem; }
+
+  .status-bar { position: relative; left: 0; bottom: 0; width: max-content; margin: auto auto 0 12px; z-index: 100; animation: slideInRight 0.5s;}
+
+  .gis-tools { position: fixed; right: 0; bottom: 0; left: 0; width: 100%; max-height: 80vh; border-radius: 36px 36px 0 0; padding: 16px 24px 36px 24px; box-shadow: 0 -10px 40px rgba(0,0,0,0.15); border-bottom: none; border-left: none; border-right: none; background: var(--bg-glass-solid); z-index: 2000; }
+  .drag-handle { display: block; width: 48px; height: 6px; background: var(--text-muted); opacity: 0.5; border-radius: 10px; margin: 0 auto 20px auto; }
+  
+  .gis-tools.collapsed { width: 100%; height: 80px; border-radius: 36px 36px 0 0; padding: 12px 24px; }
+  .gis-tools.collapsed .drag-handle { margin-top: 8px; }
+  .gis-tools.collapsed .tools-header { justify-content: center; opacity: 1; }
+  .gis-tools.collapsed .tools-title span { display: block; opacity: 1; font-size: 1.15rem; }
+  .gis-tools.collapsed .tools-title i { display: none; }
+  .toggle-tools-btn { display: none !important; }
+
+  .leaflet-routing-container { margin: 12px !important; margin-top: 200px !important; max-height: 40vh !important; }
+  .leaflet-popup-content { width: 280px !important; }
+}
