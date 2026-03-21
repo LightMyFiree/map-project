@@ -265,6 +265,14 @@ body, html {
   .gis-tools { width: 300px; }
 }
 
+/* ПК / планшет: зум ниже плавающей шапки (не под заголовком) */
+@media (min-width: 769px) {
+  .leaflet-top.leaflet-right {
+    top: 120px !important;
+    right: 20px !important;
+  }
+}
+
 @media (max-width: 768px) {
   /* Шапка становится компактной, но сохраняет стиль плавающей карточки */
   .main-header { 
