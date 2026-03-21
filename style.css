@@ -265,8 +265,16 @@ body, html {
   .gis-tools { width: 300px; }
 }
 
-/* ПК / планшет: зум ниже плавающей шапки (не под заголовком) */
-@media (min-width: 769px) {
+/* Планшеты (включая iPad Pro): опускаем зум ещё ниже */
+@media (min-width: 769px) and (max-width: 1366px) {
+  .leaflet-top.leaflet-right {
+    top: 180px !important;
+    right: 16px !important;
+  }
+}
+
+/* Широкие десктопы: отступ под плавающей шапкой */
+@media (min-width: 1367px) {
   .leaflet-top.leaflet-right {
     top: 120px !important;
     right: 20px !important;
