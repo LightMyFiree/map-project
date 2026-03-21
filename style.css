@@ -29,6 +29,10 @@
   --filter-btn-active-color: var(--primary);
   
   --popup-desc-color: #334155;
+  --popup-close-bg: rgba(255, 255, 255, 0.92);
+  --popup-close-bg-hover: rgba(255, 255, 255, 1);
+  --popup-close-border: rgba(15, 23, 42, 0.12);
+  --popup-close-shadow: 0 8px 22px -12px rgba(15, 23, 42, 0.45);
   
   --ambient-1: var(--primary-glow);
   --ambient-2: rgba(56, 189, 248, 0.3);
@@ -71,6 +75,10 @@
   --filter-btn-active-color: #ffffff;
   
   --popup-desc-color: #94a3b8;
+  --popup-close-bg: rgba(15, 23, 42, 0.92);
+  --popup-close-bg-hover: rgba(30, 41, 59, 0.98);
+  --popup-close-border: rgba(255, 255, 255, 0.2);
+  --popup-close-shadow: 0 8px 22px -12px rgba(2, 6, 23, 0.9);
   
   --ambient-1: rgba(99, 102, 241, 0.15);
   --ambient-2: rgba(14, 165, 233, 0.1);
@@ -213,8 +221,34 @@ body, html {
 .leaflet-popup-content { margin: 0; width: 320px !important; }
 .leaflet-popup-tip-container { display: none; }
 .leaflet-popup { margin-bottom: 24px; transition: transform 0.2s; }
-.leaflet-popup-close-button { color: var(--text-muted) !important; text-decoration: none; padding: 12px !important; z-index: 10; }
-.leaflet-popup-close-button:hover { color: var(--text-main) !important; background: transparent !important; }
+.leaflet-popup-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--popup-close-border);
+  background: var(--popup-close-bg) !important;
+  box-shadow: var(--popup-close-shadow);
+  color: var(--text-main) !important;
+  text-decoration: none;
+  padding: 0 !important;
+  font-size: 20px !important;
+  font-weight: 600;
+  line-height: 1;
+  z-index: 10;
+  transition: var(--transition);
+}
+
+.leaflet-popup-close-button:hover {
+  color: var(--text-main) !important;
+  background: var(--popup-close-bg-hover) !important;
+  transform: translateY(-1px) scale(1.03);
+}
 
 .popup-card { display: flex; flex-direction: column; }
 .popup-image-wrap { position: relative; width: 100%; height: 180px; overflow: hidden; }
