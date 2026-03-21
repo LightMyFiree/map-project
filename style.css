@@ -225,19 +225,21 @@ body, html {
   position: absolute;
   top: 20px;
   right: 20px;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   display: flex !important;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  border: 1px solid var(--popup-close-border);
-  background: var(--popup-close-bg) !important;
-  box-shadow: var(--popup-close-shadow);
-  color: var(--text-main) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(7, 13, 32, 0.42) !important;
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  box-shadow: 0 10px 24px -14px rgba(2, 6, 23, 0.95);
+  color: #ffffff !important;
   text-decoration: none;
   padding: 0 !important;
-  font-size: 20px !important;
+  font-size: 24px !important;
   font-weight: 600;
   line-height: 1;
   z-index: 10;
@@ -245,9 +247,9 @@ body, html {
 }
 
 .leaflet-popup-close-button:hover {
-  color: var(--text-main) !important;
-  background: var(--popup-close-bg-hover) !important;
-  transform: translateY(-1px) scale(1.03);
+  color: #ffffff !important;
+  background: rgba(7, 13, 32, 0.62) !important;
+  transform: scale(1.08);
 }
 
 .popup-card { display: flex; flex-direction: column; }
