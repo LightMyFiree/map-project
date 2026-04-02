@@ -3,32 +3,31 @@
 Генератор данных для карты (CSV -> GeoJSON).
 
 Зачем это нужно:
-- Проект остаётся статичным (HTML/CSS/JS) и спокойно деплоится на GitHub Pages.
-- Наполнение/правки точек происходят в удобной таблице `places.csv`.
-- Скрипт гарантирует корректный GeoJSON (типизация, координаты, единый формат свойств).
+Мы не хотим писать сложный сервер для карты. Этот скрипт позволяет нам 
+удобно заполнять таблицу (CSV) руками, а потом запускать скрипт, 
+чтобы он сам превратил её в правильный код для карты. И сайт остается бесплатным и простым.
 """
 
 from __future__ import annotations
 
 import csv
 import json
-import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional
 
+
+# --- Шаблон данных ---
 
 @dataclass(frozen=True)
 class PlaceRow:
     """
-    Нормализованная строка входных данных.
-
-    Мы отделяем "сырые" строки CSV от структуры данных, чтобы:
-    - валидировать вход до генерации GeoJSON,
-    - держать единый контракт полей,
-    - избежать частичных/битых объектов в итоговом файле.
+    Шаблон для одной строчки из нашей таблицы (одного места на карте).
+    
+    Зачем это нужно: 
+    Мы говорим программе: "Каждое место обязано иметь ID, Имя, Координаты и т.д.". 
+    Если в таблице будет ошибка, код сразу это заметит и не даст сломать сайт.
     """
-
     id: int
     name: str
     category: str
@@ -40,40 +39,40 @@ class PlaceRow:
     difficulty: str
 
 
-def _required(value: Optional[str], field: str, row_num: int) -> str:
-    """Проверяет обязательное поле и даёт понятную ошибку с номером строки."""
+# --- Логика проверки данных ---
 
+def _required(value: Optional[str], field: str, row_num: int) -> str:
+    """
+    Проверяет, чтобы важная ячейка в таблице не была пустой.
+    Если пустая — программа выдаст ошибку с указанием номера строки.
+    """
     if value is None or not str(value).strip():
         raise ValueError(f"CSV: пустое обязательное поле '{field}' (строка {row_num})")
     return str(value).strip()
 
 
 def _to_int(value: str, field: str, row_num: int) -> int:
-    """Парсит целое число, чтобы `id` был стабильным и сериализуемым."""
-
+    """Проверяет, что ID (или другое числовое поле) это точно целое число."""
     try:
         return int(value)
     except ValueError as exc:
-        raise ValueError(f"CSV: поле '{field}' должно быть int (строка {row_num})") from exc
+        raise ValueError(f"CSV: поле '{field}' должно быть целым числом (строка {row_num})") from exc
 
 
 def _to_float(value: str, field: str, row_num: int) -> float:
-    """Парсит число с плавающей точкой для координат."""
-
+    """Проверяет, что координаты - это числа (с точкой), а не текст."""
     try:
         return float(value)
     except ValueError as exc:
-        raise ValueError(f"CSV: поле '{field}' должно быть float (строка {row_num})") from exc
+        raise ValueError(f"CSV: поле '{field}' должно быть числом с точкой (строка {row_num})") from exc
 
+
+# --- Логика конвертации файла ---
 
 def read_places_csv(csv_path: Path) -> List[PlaceRow]:
     """
-    Читает `places.csv` и возвращает список нормализованных строк.
-
-    Ожидаемые заголовки:
-    id,name,category,lat,lng,shortDescription,fullDescription,image,difficulty
+    Открывает файл таблицы CSV, читает его строчку за строчкой и проверяет каждую.
     """
-
     places: List[PlaceRow] = []
 
     with csv_path.open(mode="r", encoding="utf-8", newline="") as f:
@@ -82,8 +81,10 @@ def read_places_csv(csv_path: Path) -> List[PlaceRow]:
         if reader.fieldnames is None:
             raise ValueError("CSV: не найдены заголовки колонок (первая строка)")
 
+        # Читаем построчно. Начинаем считать со второй строки (start=2), потому что первая - это заголовки
         for row_num, row in enumerate(reader, start=2):
-            # start=2, потому что строка 1 — заголовки, а пользователю важен "как в файле".
+            
+            # Проверяем каждую ячейку через наши функции-помощники
             pid = _to_int(_required(row.get("id"), "id", row_num), "id", row_num)
             name = _required(row.get("name"), "name", row_num)
             category = _required(row.get("category"), "category", row_num).lower()
@@ -95,17 +96,12 @@ def read_places_csv(csv_path: Path) -> List[PlaceRow]:
             image = _required(row.get("image"), "image", row_num)
             difficulty = _required(row.get("difficulty"), "difficulty", row_num)
 
+            # Если всё хорошо, собираем место по шаблону и добавляем в общий список
             places.append(
                 PlaceRow(
-                    id=pid,
-                    name=name,
-                    category=category,
-                    lat=lat,
-                    lng=lng,
-                    short_description=short_description,
-                    full_description=full_description,
-                    image=image,
-                    difficulty=difficulty,
+                    id=pid, name=name, category=category, lat=lat, lng=lng,
+                    short_description=short_description, full_description=full_description,
+                    image=image, difficulty=difficulty,
                 )
             )
 
@@ -114,12 +110,10 @@ def read_places_csv(csv_path: Path) -> List[PlaceRow]:
 
 def place_to_feature(place: PlaceRow) -> Dict[str, Any]:
     """
-    Конвертирует одну запись в GeoJSON Feature.
-
-    Важно: GeoJSON требует координаты в порядке [longitude, latitude] = [lng, lat].
-    Это частый источник ошибок, поэтому фиксируем правило в одном месте.
+    Переводит одно место из нашего шаблона в специальный формат, который понимает веб-карта (GeoJSON).
     """
-
+    # Важно: Формат карт требует, чтобы координаты шли строго в порядке [долгота, широта]. 
+    # В таблице мы пишем как привыкли (широта, долгота), поэтому здесь мы меняем их местами.
     return {
         "type": "Feature",
         "properties": {
@@ -133,49 +127,42 @@ def place_to_feature(place: PlaceRow) -> Dict[str, Any]:
         },
         "geometry": {
             "type": "Point",
-            "coordinates": [place.lng, place.lat],
+            "coordinates": [place.lng, place.lat], 
         },
     }
 
 
 def build_feature_collection(places: Iterable[PlaceRow]) -> Dict[str, Any]:
-    """Собирает корректный GeoJSON FeatureCollection для карты."""
-
-    features = [place_to_feature(p) for p in places]
-    return {"type": "FeatureCollection", "features": features}
+    """Собирает все наши переведенные места в один большой список для карты."""
+    return {"type": "FeatureCollection", "features": [place_to_feature(p) for p in places]}
 
 
 def write_geojson(feature_collection: Dict[str, Any], out_path: Path) -> None:
     """
-    Записывает GeoJSON на диск, создавая папки при необходимости.
-
-    `ensure_ascii=False` важен для кириллицы, иначе JSON станет нечитаемым.
+    Сохраняет готовые данные в новый файл.
     """
-
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    # Зачем это нужно: ensure_ascii=False очень важен, иначе русские буквы превратятся 
+    # в непонятные коды (кракозябры), и файл станет невозможно читать глазами.
     out_path.write_text(json.dumps(feature_collection, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+# --- Главный запуск ---
+
 def main() -> int:
-    """
-    CLI-точка входа.
-
-    Скрипт специально без внешних зависимостей, чтобы его можно было запускать
-    на защите "из коробки" обычным Python 3.
-    """
-
+    """Главная функция, которая командует всем парадом."""
     root = Path(__file__).resolve().parents[1]
     csv_path = root / "data_preparation" / "places.csv"
-    # По умолчанию пишем в отдельный файл, чтобы случайно не “сломать” текущую карту.
-    # Если нужно заменить основной датасет, можно вручную скопировать
-    # `data/points.generated.geojson` -> `data/points.geojson`.
+    
+    # Зачем это нужно: Мы сохраняем в файл '.generated.geojson', чтобы случайно не затереть 
+    # главный рабочий файл карты, если вдруг в таблице была ошибка. Это защита "от дурака".
     out_geojson_path = root / "data" / "points.generated.geojson"
 
-    places = read_places_csv(csv_path)
-    feature_collection = build_feature_collection(places)
-    write_geojson(feature_collection, out_geojson_path)
+    places = read_places_csv(csv_path)                      # 1. Читаем таблицу
+    feature_collection = build_feature_collection(places)   # 2. Переводим формат
+    write_geojson(feature_collection, out_geojson_path)     # 3. Сохраняем в файл
 
-    print(f"OK: сгенерировано объектов: {len(places)} -> {out_geojson_path}")
+    print(f"Всё супер: создано объектов: {len(places)}. Файл сохранен в -> {out_geojson_path}")
     return 0
 
 
