@@ -7,6 +7,8 @@
  * - избегает "комментариев-капитанов" (повторения очевидного кода).
  */
 
+// --- Настройка карты и темы ---
+
 /**
  * Текущая тема, вычисленная по `data-theme` на `<html>`.
  *
@@ -14,6 +16,7 @@
  * - атрибут выставляется ранним скриптом в `index.html`, чтобы избежать FOUC,
  * - поэтому при старте мы сразу выбираем правильный набор тайлов.
  */
+// Зачем это нужно: проверяем тему до отрисовки карты, чтобы экран не «моргал» белым при тёмной теме.
 let isDark = document.documentElement.getAttribute("data-theme") === "dark";
 
 /**
@@ -23,6 +26,7 @@ let isDark = document.documentElement.getAttribute("data-theme") === "dark";
  * - `zoomControl` ставим вручную в `topright` (меньше конфликтов с плавающей шапкой),
  * - `attributionControl` убран, чтобы не перекрывал интерфейс (можно вернуть при необходимости).
  */
+// Зачем отключать zoom по умолчанию: стандартные +/- часто наезжают на плавающую шапку; ниже добавим zoom вручную.
 const map = L.map("map", { zoomControl: false, attributionControl: false }).setView([44.55, 34.1], 9);
 
 /**
@@ -32,6 +36,7 @@ const map = L.map("map", { zoomControl: false, attributionControl: false }).setV
  * - это стабильные публичные тайлы,
  * - есть парные стили `voyager` (light) и `dark_all` (dark).
  */
+// Зачем: карта собирается из тайлов; Carto даёт пару светлый/тёмный стиль под переключатель темы.
 const tileLayer = L.tileLayer(
   isDark
     ? "https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png"
@@ -46,7 +51,10 @@ const tileLayer = L.tileLayer(
  * - слева сверху находится плавающая шапка,
  * - позиция справа проще “лечится” CSS-ом под разные брейкпоинты.
  */
+// Возвращаем «плюс/минус» вручную и фиксируем позицию (см. также media-правила в style.css).
 L.control.zoom({ position: "topright" }).addTo(map);
+
+// --- Поиск элементов на странице (связка с index.html) ---
 
 /** Корневой контейнер кнопок фильтрации категорий. */
 const filtersRoot = document.getElementById("filters");
@@ -70,6 +78,7 @@ const themeIcon = themeToggleBtn?.querySelector("i");
  * - категории в данных — доменная часть,
  * - а иконки/цвета/лейблы — часть представления, их удобнее менять без правки данных.
  */
+// Зачем: цвета/иконки категорий — презентационный слой; меняем здесь, не трогая GeoJSON.
 const categoryConfig = {
   all: { label: "Все места", icon: "ph-map-trifold", color: "var(--text-main)", iconColor: "var(--text-inverse)" },
   mountains: { label: "Горы", icon: "ph-mountains", color: "#f59e0b" },
@@ -89,17 +98,22 @@ if (themeIcon) {
  * - фильтрация становится дешёвой: показываем/скрываем группы,
  * - не пересоздаём маркеры при каждом переключении категории.
  */
+
+// --- Переменные состояния (данные и маршрут) ---
+
 const categoryLayers = new Map();
 /** Активная категория фильтра (по умолчанию показываем всё). */
 let currentCategory = "all";
 /** Загруженные точки (GeoJSON Features) — источник правды для экспорта/рендера. */
 let loadedFeatures = [];
 /** Контрол маршрутизации Leaflet Routing Machine (если маршрут построен). */
-let routingControl = null;
+let routingControl = null; // ссылка на L.Routing.control, чтобы снять его при clearRoutes
 /** Слой для импортированных маршрутов (LineString) — отдельно от LRM. */
 let importedRoutesGroup = L.featureGroup().addTo(map);
 /** Активный маршрут как GeoJSON Feature (используется экспортом). */
 let activeRouteGeoJSON = null;
+
+// --- Управление интерфейсом (статус, маркеры, popup) ---
 
 /**
  * Пишет сообщение в статус-бар.
@@ -110,7 +124,7 @@ let activeRouteGeoJSON = null;
 function setStatus(message, isError = false) {
   if (!statusText) return;
   statusText.innerHTML = message;
-  statusText.style.color = isError ? "#e11d48" : "inherit";
+  statusText.style.color = isError ? "#e11d48" : "inherit"; // ошибки подсвечиваем красным
 }
 
 /**
@@ -127,6 +141,7 @@ function createCustomMarker(category) {
   const config = categoryConfig[category] || categoryConfig.other;
   return L.divIcon({
     className: "clear-default-icon",
+    // Иконка — обычный HTML + inline-стили цвета категории (см. .custom-marker в style.css)
     html: `<div class="custom-marker"><div class="marker-pulse" style="background-color: ${config.color}"></div><div class="marker-pin" style="background-color: ${config.color}; color: ${config.iconColor || "white"}"><i class="ph-bold ${config.icon}"></i></div></div>`,
     iconSize: [40, 40], iconAnchor: [20, 20], popupAnchor: [0, -22]
   });
@@ -162,6 +177,8 @@ function popupHtml(properties) {
   `;
 }
 
+// --- Взаимодействие с картой (popup, клики) ---
+
 /**
  * Добавляет поведение popup: смещение карты и обработчик маршрута.
  *
@@ -178,6 +195,7 @@ function bindPopupRouteAction(marker, feature) {
     // Почему разные значения:
     // - на мобильных снизу есть плотный UI, на десктопе мешает в основном шапка сверху,
     // - это простая эвристика, чтобы popup и кнопка "Маршрут" оставались кликабельны.
+    // Дополнительно: плавающая шапка может перекрывать popup — сдвигаем «камеру» через project/unproject.
     projectedPoint.y -= isMobile ? 80 : 180; 
     map.flyTo(map.unproject(projectedPoint, currentZoom), currentZoom, { duration: 0.8, easeLinearity: 0.25 });
 
@@ -187,7 +205,7 @@ function bindPopupRouteAction(marker, feature) {
     button.addEventListener("click", () => {
       buildRouteTo(feature);
       marker.closePopup();
-      if (isMobile) toolsPanel.classList.add("collapsed");
+      if (isMobile) toolsPanel.classList.add("collapsed"); // на телефоне убираем панель инструментов с пути
     }, { once: true });
   });
 }
@@ -200,6 +218,7 @@ function bindPopupRouteAction(marker, feature) {
  */
 function addFeatureToLayers(feature) {
   const category = feature.properties?.category || "other";
+  // «Папка» слоя под категорию создаётся лениво — не держим пустые LayerGroup без необходимости
   if (!categoryLayers.has(category)) categoryLayers.set(category, L.layerGroup());
   const [lng, lat] = feature.geometry.coordinates;
 
@@ -214,7 +233,7 @@ function addFeatureToLayers(feature) {
     });
 
   bindPopupRouteAction(marker, feature);
-  categoryLayers.get(category).addLayer(marker);
+  categoryLayers.get(category).addLayer(marker); // маркер кладём в слой категории для быстрых фильтров
 }
 
 /**
@@ -227,7 +246,7 @@ function addFeatureToLayers(feature) {
 function renderByCategory(category) {
   const allMarkers = [];
   categoryLayers.forEach((layer) => {
-    map.removeLayer(layer);
+    map.removeLayer(layer); // сначала прячем все слои, затем показываем нужный — дешевле, чем пересоздавать маркеры
     if (category === "all" || layer === categoryLayers.get(category)) {
       layer.addTo(map);
       layer.eachLayer((m) => allMarkers.push(m));
@@ -238,6 +257,8 @@ function renderByCategory(category) {
     map.flyToBounds(group.getBounds(), { padding: [80, 80], duration: 1.2 });
   }
 }
+
+// --- Фильтры (кнопки категорий) ---
 
 /**
  * Обновляет состояние кнопок фильтра (визуально активная категория).
@@ -257,6 +278,7 @@ function setActiveButton(nextCategory) {
  * - после импорта могут появиться новые категории,
  * - UI подстроится автоматически без ручной правки.
  */
+// Зачем: кнопки фильтров не зашиты в HTML — при импорте новых категорий UI подстраивается сам.
 function createFilters() {
   const categories = ["all", ...categoryLayers.keys()];
   filtersRoot.innerHTML = "";
@@ -272,6 +294,8 @@ function createFilters() {
   });
   setActiveButton(currentCategory);
 }
+
+// --- Загрузка и удаление данных на карте ---
 
 /**
  * Полностью обновляет данные карты (пересоздаёт слои/фильтры/рендер).
@@ -321,6 +345,8 @@ function clearRoutes() {
   setStatus(`<i class="ph-bold ph-trash"></i> Маршрут сброшен`);
 }
 
+// --- Импорт / экспорт файлов (GIS) ---
+
 /**
  * Импортирует данные из SHP(zip) или KML.
  *
@@ -333,6 +359,7 @@ async function handleImport(file) {
   let geojson = null;
 
   try {
+    // Разные форматы читаем разными парсерами (shpjs / togeojson)
     if (name.endsWith(".zip")) {
       const buffer = await file.arrayBuffer();
       geojson = await shp(buffer);
@@ -367,6 +394,7 @@ async function handleImport(file) {
           }
         });
       } else if (f.geometry.type.includes("LineString")) {
+        // Линии (маршруты из файла) рисуем отдельно от точек
         L.geoJSON(f, { style: { color: "#5c67f2", weight: 6, opacity: 0.9 } }).addTo(importedRoutesGroup);
         if (!activeRouteGeoJSON) activeRouteGeoJSON = f;
       }
@@ -426,6 +454,8 @@ function exportToKML(featuresCollection, baseName) {
   }
 }
 
+// --- Привязка обработчиков к кнопкам из index.html ---
+
 document.getElementById("import-btn").addEventListener("click", () => importInput.click());
 importInput.addEventListener("change", (e) => {
   if (e.target.files[0]) { setStatus(`<i class="ph-bold ph-spinner-gap" style="animation: spin 1s linear infinite"></i> Чтение...`); handleImport(e.target.files[0]); }
@@ -449,6 +479,7 @@ function getRouteCollection() {
 document.getElementById("export-rt-shp").addEventListener("click", () => exportToSHP(getRouteCollection(), "map-routes"));
 document.getElementById("export-rt-kml").addEventListener("click", () => exportToKML(getRouteCollection(), "map-routes"));
 
+// Тема: запоминаем выбор в localStorage (см. ранний скрипт в index.html)
 themeToggleBtn?.addEventListener("click", () => {
   isDark = !isDark;
   localStorage.setItem("theme", isDark ? "dark" : "light");
@@ -473,6 +504,8 @@ toolsPanel?.addEventListener("click", (e) => {
     toolsPanel.classList.remove("collapsed");
   }
 });
+
+// --- Маршруты: геолокация, LRM, Яндекс ---
 
 /**
  * Получает координаты пользователя через Geolocation API.
@@ -516,9 +549,10 @@ async function buildRouteTo(feature) {
     waypoints: [start, destination],
     routeWhileDragging: false, addWaypoints: false, fitSelectedRoutes: true, showAlternatives: false, language: "ru",
     lineOptions: { styles: [{ color: "#1e293b", opacity: 0.9, weight: 8 }, { color: "#5c67f2", opacity: 1, weight: 4 }] },
-    createMarker: () => null
+    createMarker: () => null // стандартные маркеры LRM скрываем — свой UI в popup/маршруте
   }).addTo(map);
 
+  // Кнопки Яндекс / отмена вставляем в контейнер маршрутизатора
   const routingContainer = document.querySelector('.leaflet-routing-container');
   if (routingContainer) {
     const btnWrapper = document.createElement("div");
@@ -528,6 +562,7 @@ async function buildRouteTo(feature) {
     yandexBtn.className = "yandex-route-btn";
     yandexBtn.innerHTML = '<i class="ph-bold ph-navigation-arrow"></i> Открыть в Яндекс Картах';
     yandexBtn.onclick = () => {
+      // deep-link в приложение и запасная веб-ссылка (сайт не знает, установлено ли приложение)
       const appUrl = `yandexmaps://build_route_on_map?lat_to=${destination.lat}&lon_to=${destination.lng}`;
       const webUrl = `https://yandex.ru/maps/?rtext=~${destination.lat},${destination.lng}&rtt=auto`;
       const startTime = Date.now();
@@ -565,6 +600,8 @@ async function buildRouteTo(feature) {
 
   setStatus(`<i class="ph-bold ph-navigation-arrow"></i> Маршрут построен`);
 }
+
+// --- Точка входа: загрузка data/points.geojson ---
 
 /**
  * Загрузка стандартных данных и первичный рендер.

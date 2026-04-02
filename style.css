@@ -1,3 +1,7 @@
+/* --- ПАЛИТРА ЦВЕТОВ (ПЕРЕМЕННЫЕ) --- */
+/* Зачем это нужно: вместо того чтобы писать один и тот же цвет десятки раз,
+   задаём имена вроде --primary и меняем палитру в одном месте. */
+
 :root {
   /* Светлая тема */
   --bg-color: #e2e8f0;
@@ -44,7 +48,7 @@
   --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Тёмная тема */
+/* Тёмная тема: при data-theme="dark" на <html> подменяются значения переменных */
 [data-theme="dark"] {
   --bg-color: #020617;
   --primary: #6366f1;
@@ -84,8 +88,10 @@
   --ambient-2: rgba(14, 165, 233, 0.1);
 }
 
+/* Сброс базовых отступов/подсветки тапа, чтобы вёрстка вела себя предсказуемо */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
 
+/* Страница на весь экран; скролл у карты/панелей, а не у document */
 body, html {
   margin: 0; padding: 0; width: 100%; height: 100%;
   font-family: 'Outfit', -apple-system, sans-serif;
@@ -94,14 +100,19 @@ body, html {
   transition: background-color 0.4s ease;
 }
 
+/* Слой Leaflet: карта на заднем плане на весь viewport */
 .map { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
 
+/* Декоративные «пятна» света поверх карты (не перехватывают клики) */
 .ambient-light { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; z-index: 2; pointer-events: none; transition: background 0.4s ease; }
 .light-1 { top: -100px; left: -100px; width: 400px; height: 400px; background: var(--ambient-1); }
 .light-2 { bottom: -100px; right: -100px; width: 400px; height: 400px; background: var(--ambient-2); }
 
+/* Слой UI поверх карты: pointer-events: none на контейнере, чтобы клики проходили в карту,
+   а интерактивные панели включают pointer-events сами */
 .ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; pointer-events: none; display: flex; flex-direction: column; }
 
+/* СТИЛЬ «СТЕКЛА»: полупрозрачность + blur — панели читаются и не перекрывают карту сплошным прямоугольником */
 .glass-panel {
   background: var(--bg-glass-gradient);
   backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
@@ -120,6 +131,7 @@ body, html {
 }
 .glass-btn:hover { background: var(--btn-glass-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
 
+/* Анимации появления шапки/панелей при загрузке */
 .fade-in-down { animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .slide-in-right { animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -128,6 +140,7 @@ body, html {
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
 
+/* Плавающая шапка с фильтрами */
 .main-header {
   position: absolute; top: 20px; left: 20px; right: 20px;
   display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
@@ -155,6 +168,7 @@ body, html {
   padding: 6px; display: flex; gap: 4px; flex-wrap: wrap; align-items: center;
   border: 1px solid var(--filter-wrapper-border); transition: var(--transition);
 }
+/* Кнопки категорий в «капсуле» */
 .filter-btn {
   background: transparent; border: none; border-radius: 999px;
   padding: 10px 18px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted);
@@ -170,6 +184,7 @@ body, html {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
 }
 
+/* Панель импорта/экспорта (GIS) */
 .gis-tools {
   position: absolute; right: 20px; bottom: 20px; display: flex; flex-direction: column;
   padding: 24px; width: 320px; max-height: calc(100vh - 140px); overflow-y: auto;
@@ -183,6 +198,7 @@ body, html {
 .tools-title i { font-size: 1.4rem; color: var(--primary); }
 
 .toggle-tools-btn { width: 36px; height: 36px; border-radius: 12px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: var(--transition); color: var(--text-main); }
+/* Свернутая панель — компактный круг с иконкой */
 .gis-tools.collapsed { width: 84px; height: 84px; padding: 24px; overflow: hidden; cursor: pointer; border-radius: 42px; background: var(--bg-glass-solid); }
 .gis-tools.collapsed .tools-content, .gis-tools.collapsed .tools-title span { opacity: 0; pointer-events: none; display: none; }
 .gis-tools.collapsed .toggle-tools-btn { display: none; }
@@ -207,16 +223,17 @@ body, html {
 .status-text { display: flex; align-items: center; gap: 8px; }
 .status-bar i { font-size: 1.3rem; color: var(--primary); display: flex; align-items: center; }
 
-/* Маркеры */
+/* Кастомные маркеры: пин + пульс (divIcon в script.js) */
 .custom-marker { position: relative; display: flex; align-items: center; justify-content: center; animation: markerPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .marker-pin { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.15), inset 0 -3px 0 rgba(0,0,0,0.1); z-index: 2; border: 3px solid var(--bg-glass-solid); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.4s, border-color 0.4s; }
 .custom-marker:hover .marker-pin { transform: scale(1.15) translateY(-6px); }
+/* Пульс вокруг маркера — привлекает внимание без лишней анимации всей карты */
 .marker-pulse { position: absolute; width: 100%; height: 100%; background: inherit; border-radius: 50%; z-index: 1; animation: pulse 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
 
 @keyframes markerPop { 0% { transform: scale(0) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
 @keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 70% { transform: scale(2.5); opacity: 0; } 100% { transform: scale(2.5); opacity: 0; } }
 
-/* Всплывающие окна */
+/* Popup Leaflet: оформляем «карточку» объекта в стиле glass */
 .leaflet-popup-content-wrapper { background: var(--bg-glass-solid); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur); border: 1px solid var(--border-glass-light); border-radius: 24px; box-shadow: var(--shadow-float); padding: 0; overflow: hidden; color: var(--text-main); }
 .leaflet-popup-content { margin: 0; width: 320px !important; }
 .leaflet-popup-tip-container { display: none; }
@@ -262,6 +279,7 @@ body, html {
 .popup-meta { font-size: 0.85rem; color: var(--text-muted); margin: 0 0 16px 0; display: flex; justify-content: space-between; font-weight: 600; }
 .popup-meta i { font-size: 1.1rem; vertical-align: middle; margin-right: 4px; color: var(--primary); }
 .popup-desc { font-size: 0.95rem; line-height: 1.6; margin: 0 0 24px 0; color: var(--popup-desc-color); }
+/* Основное действие в карточке — контрастная кнопка маршрута */
 .route-btn { width: 100%; background: var(--text-main); color: var(--text-inverse); border: none; border-radius: var(--radius-sm); padding: 16px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
 .route-btn:hover { background: var(--text-muted); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); }
 .route-btn:active { transform: scale(0.96); }
@@ -294,7 +312,9 @@ body, html {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
-/* ПРАВИЛЬНАЯ АДАПТАЦИЯ (КАК В ВЕРСИИ ДЛЯ ПК) */
+/* --- Адаптация под планшеты и телефоны ---
+   На узком экране меньше места: шапка компактнее, фильтры скроллятся, зум уходит ниже шапки */
+/* Планшеты и небольшие ноутбуки */
 @media (max-width: 1024px) {
   .main-header { padding: 16px 20px; top: 16px; left: 16px; right: 16px; width: auto; max-width: none; }
   .title { font-size: 1.4rem; }
@@ -317,6 +337,7 @@ body, html {
   }
 }
 
+/* Телефоны: вертикальная шапка, горизонтальный скролл фильтров, фиксированная панель маршрута */
 @media (max-width: 768px) {
   /* Шапка становится компактной, но сохраняет стиль плавающей карточки */
   .main-header { 
