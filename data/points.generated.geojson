@@ -5,18 +5,18 @@
       "type": "Feature",
       "properties": {
         "id": 1,
-        "name": "Озеро Сукко",
+        "name": "Водопады Руфабго",
         "category": "water",
-        "shortDescription": "Озеро у подножья горы Широкой.",
-        "fullDescription": "Озеро занесено в Красную книгу. Оно находится у подножья горы Широкой и знаменито кипарисами, растущими прямо в воде.",
-        "image": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80",
-        "difficulty": "Легкая"
+        "shortDescription": "Ущелье притока реки Белой.",
+        "fullDescription": "Находится на горном плато Лаго-наки западного Кавказа. За свой путь ручей образует множество порогов и водопадов.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/6/66/Falls_Creek_Rufabgo_SA07_-_Girlish_Braid_%28%D0%92%D0%BE%D0%B4%D0%BE%D0%BF%D0%B0%D0%B4_%22%D0%94%D0%B5%D0%B2%D0%B8%D1%87%D1%8C%D1%8F_%D0%BA%D0%BE%D1%81%D0%B0%22%29.jpg",
+        "difficulty": "Средняя"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          37.4567,
-          44.7043
+          40.1719,
+          44.2633
         ]
       }
     },
@@ -24,11 +24,182 @@
       "type": "Feature",
       "properties": {
         "id": 2,
+        "name": "Хаджохская теснина",
+        "category": "water",
+        "shortDescription": "Живописное ущелье реки Белой.",
+        "fullDescription": "Уникальный памятник природы. Ущелье достаточное узкое, река пенится, спадает порогами, а скалы принимают причудливую форму.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Hadzhoh_gorge_1.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.17556,
+          44.28694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3,
+        "name": "Гранитный каньон",
+        "category": "water",
+        "shortDescription": "Каньон из красного гранита.",
+        "fullDescription": "Простирается вдоль автотрассы Майкоп – Гузерипль. Внимание цепляют отвесные скалы, в состав которых входит красный гранит.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/5/5e/%D0%90%D0%BA%D1%82%D0%BE%D0%B2%D1%81%D1%8C%D0%BA%D0%B8%D0%B9_%D0%BA%D0%B0%D0%BD%D1%8C%D0%B9%D0%BE%D0%BD_%D0%B2%D0%BE%D1%81%D0%B5%D0%BD%D0%B8_%283%29.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.1322,
+          44.1629
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4,
+        "name": "Гуамское ущелье",
+        "category": "water",
+        "shortDescription": "Ущелье на реке Курджипс.",
+        "fullDescription": "Ущелье влечет скалолазов и туристов со всей России. Инфраструктура развита хорошо, поблизости множество термальных источников.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Guam_canyon%2C_%D0%93%D1%83%D0%B0%D0%BC%D1%81%D0%BA%D0%BE%D0%B5_%D1%83%D1%89%D0%B5%D0%BB%D1%8C%D0%B5%2C_%D0%97%D0%B0%D0%BF%D0%B0%D0%B4%D0%BD%D1%8B%D0%B9_%D0%9A%D0%B0%D0%B2%D0%BA%D0%B0%D0%B7.jpg",
+        "difficulty": "Средняя"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.9139,
+          44.2158
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5,
+        "name": "Озеро Сукко",
+        "category": "water",
+        "shortDescription": "Кипарисовая роща на озере.",
+        "fullDescription": "Озеро занесено в Красную книгу. Оно находится у подножья горы Широкой и знаменито своими кипарисами, растущими прямо в воде.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Anapsky_District%2C_Krasnodar_Krai%2C_Russia_-_panoramio_%2820%29.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.400285,
+          44.791405
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 6,
+        "name": "Озеро Абрау",
+        "category": "water",
+        "shortDescription": "Горное озеро в Абрау-Дюрсо.",
+        "fullDescription": "Крупнейшее пресноводное озеро Краснодарского края. Туристов сюда влечет спокойный отдых и расположенный неподалеку завод вин.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/9/9d/%D0%9E%D0%B7%D0%B5%D1%80%D0%BE_%D0%90%D0%B1%D1%80%D0%B0%D1%83.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.5919,
+          44.6986
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 7,
+        "name": "Пшадские водопады",
+        "category": "water",
+        "shortDescription": "Каскад из 8 водопадов.",
+        "fullDescription": "Водопады расположены на Красной Речке. Самый востребованный маршрут среди туристов ведет сразу через восемь водопадов.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/d/db/%D0%9F%D1%88%D0%B0%D0%B4%D1%81%D0%BA%D0%B8%D0%B5.jpg",
+        "difficulty": "Средняя"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.4753,
+          44.6004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 8,
+        "name": "Агурские водопады",
+        "category": "water",
+        "shortDescription": "Водопады в Сочинском нацпарке.",
+        "fullDescription": "Особо охраняемая территория. Дорога к водопадам прорублена в горной породе и берёт начало у Агурского ущелья.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Upper_Agura_waterfall.JPG",
+        "difficulty": "Сложная"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.8073,
+          43.5438
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 9,
+        "name": "Бугазская коса",
+        "category": "water",
+        "shortDescription": "Песчаная полоса между морем и лиманом.",
+        "fullDescription": "12-километровая песчаная полоса в курортной зоне Анапы. Это главное место краснодарских кайтсерферов и любителей дикого отдыха.",
+        "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.948889,
+          45.085556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 10,
+        "name": "Озеро Ханское",
+        "category": "water",
+        "shortDescription": "Соленое озеро лагунного типа.",
+        "fullDescription": "Ранее оно было заливом Азовского моря. Вода в озере высокоминерализованная, горько-солёная. Озеро имеет природоохранный статус.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/6/6d/%D0%A5%D0%B0%D0%BD%D1%81%D0%BA%D0%BE%D0%B5_%D0%BE%D0%B7%D0%B5%D1%80%D0%BE._%D0%95%D0%B9%D1%81%D0%BA%D0%B8%D0%B9_%D1%80%D0%B0%D0%B9%D0%BE%D0%BD.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.3734,
+          46.2461
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 11,
         "name": "Скала Парус",
         "category": "mountains",
         "shortDescription": "Одинокая скала на побережье.",
-        "fullDescription": "Известная природная достопримечательность на берегу моря. Удобна для короткой прогулки и фото.",
-        "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+        "fullDescription": "Находится неподалеку от курортного хутора Прасковеевка. Имеет охранный статус с 1971 года. Привлекает множество туристов и скалолазов.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Parus_rock.jpg",
         "difficulty": "Легкая"
       },
       "geometry": {
@@ -36,6 +207,310 @@
         "coordinates": [
           38.184389,
           44.438639
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 12,
+        "name": "Гора Ахун",
+        "category": "mountains",
+        "shortDescription": "Смотровая гора в Сочи.",
+        "fullDescription": "Панорама Кавказских гор и побережья Черного моря предстаёт во всей красе с обзорной площадки на горе Ахун.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Akhun_Sochi.JPG",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.8433,
+          43.5506
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 13,
+        "name": "Ахунская пещера",
+        "category": "mountains",
+        "shortDescription": "Пещера-лабиринт на горе Ахун.",
+        "fullDescription": "Является одной из самых интересных пещер Сочи, так как представляет собой запутанный лабиринт. Организованных экскурсий сюда нет.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/e/e4/AyanSpr_1.jpg",
+        "difficulty": "Сложная"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.8315,
+          43.5572
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 14,
+        "name": "Большой Тхач",
+        "category": "mountains",
+        "shortDescription": "Горный массив на границе регионов.",
+        "fullDescription": "Горная вершина расположена на границе. Обилие троп и удобные площадки привлекают сюда любителей походов.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/3/31/Bolshoy_Tkhach%2C_Adygea%2C_%D0%91%D0%BE%D0%BB%D1%8C%D1%88%D0%BE%D0%B9_%D0%A2%D1%85%D0%B0%D1%87%2C_%D0%BA%D1%83%D1%8D%D1%81%D1%82%D0%B0%2C_%D0%90%D0%B4%D1%8B%D0%B3%D0%B5%D1%8F.jpg",
+        "difficulty": "Сложная"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.4293,
+          44.0427
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 15,
+        "name": "Гора Фишт",
+        "category": "mountains",
+        "shortDescription": "Самая западная вершина Кавказа.",
+        "fullDescription": "Является самой высокой точкой плато Лагонаки. Включена в список Всемирного наследия ЮНЕСКО.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Fisht_in_Winter.jpg",
+        "difficulty": "Сложная"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.90306,
+          43.95361
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 16,
+        "name": "Плато Лагонаки",
+        "category": "mountains",
+        "shortDescription": "Горное плато на Западном Кавказе.",
+        "fullDescription": "Плато лежит между реками Белой и Пшехой. На нем расположены 20 озер и знаменитые карстовые пещеры.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/4/47/Panorama_plato_L-N.jpg",
+        "difficulty": "Средняя"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.0,
+          44.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 17,
+        "name": "Большая Азишская пещера",
+        "category": "mountains",
+        "shortDescription": "Двухъярусная пещера на Лагонаки.",
+        "fullDescription": "Состоит из верхнего и нижнего ярусов. Доступна для посещения туристами на треть от своей общей протяженности.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/6/68/%D0%91%D0%BE%D0%BB%D1%8C%D1%88%D0%B0%D1%8F_%D0%90%D0%B7%D0%B8%D1%88%D1%81%D0%BA%D0%B0%D1%8F_%D0%BF%D0%B5%D1%89%D0%B5%D1%80%D0%B0_1.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.0285,
+          44.1218
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 18,
+        "name": "Вулкан Тиздар",
+        "category": "mountains",
+        "shortDescription": "Действующий грязевой вулкан.",
+        "fullDescription": "Воронка, заполненная грязью, глубиной 25 метров. Высокая плотность грязи не дает утонуть. Используется как курорт.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/3/36/%D0%93%D0%BE%D1%80%D0%B0_%D0%A2%D0%B8%D0%B7%D0%B4%D0%B0%D1%80.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.08472,
+          45.35972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 19,
+        "name": "Джанхотский бор",
+        "category": "forest",
+        "shortDescription": "Бор пицундской сосны.",
+        "fullDescription": "Уникальное место на побережье Черного моря. Площадь соснового бора – 950 га, растение занесено в Красную книгу.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%D0%94%D0%B6%D0%B0%D0%BD%D1%85%D0%BE%D1%82%D1%81%D0%BA%D0%B8%D0%B9_%D1%81%D0%BE%D1%81%D0%BD%D0%BE%D0%B2%D1%8B%D0%B9_%D0%B1%D0%BE%D1%80.JPG",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.16083,
+          44.455
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 20,
+        "name": "Кавказский заповедник",
+        "category": "forest",
+        "shortDescription": "Биосферный заповедник ЮНЕСКО.",
+        "fullDescription": "Нетронутая территория международного значения. Там живут более 80 видов млекопитающих, многие из которых признаны исчезающими.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Kaukasian_nature_reserve.jpg/500px-Kaukasian_nature_reserve.jpg",
+        "difficulty": "Разная"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.4009,
+          43.8362
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 21,
+        "name": "Тисо-самшитовая роща",
+        "category": "forest",
+        "shortDescription": "Реликтовый лес в Сочи.",
+        "fullDescription": "Музей древней природы площадью более 300 гектаров. Принимает туристов круглый год, предоставляя множество маршрутов.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/0/05/%D0%9B%D0%B0%D0%B1%D0%B8%D1%80%D0%B8%D0%BD%D1%82_%D0%B2_%D1%82%D0%B8%D1%81%D0%BE-%D1%81%D0%B0%D0%BC%D1%88%D0%B8%D1%82%D0%BE%D0%B2%D0%BE%D0%B9_%D1%80%D0%BE%D1%89%D0%B5.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.87582,
+          43.53598
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 22,
+        "name": "Дендрарий",
+        "category": "forest",
+        "shortDescription": "Парк в городе Сочи.",
+        "fullDescription": "Уникальный памятник садово-паркового искусства. Группы растений высажены по систематическому принципу.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Dendrarium_Sochi_Mauritanian_arbour.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.745,
+          43.57
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 23,
+        "name": "Долина лотосов",
+        "category": "forest",
+        "shortDescription": "Водный сад в Ахтанизовской.",
+        "fullDescription": "Рукотворная достопримечательность, усеянная индийскими лотосами. Пик туристической активности приходится на июль-август.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Nelumno_nucifera_open_flower_-_botanic_garden_adelaide2.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.14,
+          45.292
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 24,
+        "name": "Ботанический сад КубГУ",
+        "category": "forest",
+        "shortDescription": "Сад в Пашковском массиве.",
+        "fullDescription": "Является учебной базой биологического факультета и оказывает большую помощь в озеленении Краснодара.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Greenhouse_%28external_view%29%2C_Botanical_Gardens%2C_Saint_Petersburg_State_University%2C_Russia_%2810_April_2008%29.jpg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.03083,
+          45.01944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 25,
+        "name": "Чистяковская роща",
+        "category": "forest",
+        "shortDescription": "Роща в северной части Краснодара.",
+        "fullDescription": "В роще ведётся работа по увеличению древостоя. Растительную коллекцию пополнили тюльпанное дерево и магнолия.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/6/66/%D0%9F%D0%B5%D1%80%D0%B2%D0%BE%D0%BC%D0%B0%D0%B9%D1%81%D0%BA%D0%B0%D1%8F_%D1%80%D0%BE%D1%89%D0%B0_%28%D0%A7%D0%B8%D1%81%D1%82%D1%8F%D0%BA%D0%BE%D0%B2%D1%81%D0%BA%D0%B0%D1%8F_%D1%80%D0%BE%D1%89%D0%B0%29%2C_%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B4%D0%B0%D1%80_01.JPG",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.99498,
+          45.05773
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 26,
+        "name": "Колхидские леса",
+        "category": "forest",
+        "shortDescription": "Леса на Имеретинской низменности.",
+        "fullDescription": "Простираются вдоль западных склонов Кавказского хребта. Являются ключевой орнитологической территорией.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/b/ba/%D0%9A%D0%BE%D0%BB%D1%85%D0%B8%D0%B4%D1%81%D0%BA%D0%B8%D0%B9_%D0%BB%D0%B5%D1%81.jpg",
+        "difficulty": "Средняя"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.95,
+          43.4
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 27,
+        "name": "Ахтарские озёра",
+        "category": "water",
+        "shortDescription": "Система солёных озёр.",
+        "fullDescription": "Включает озёра Скелеватое, Комковатое и Солёное. Уникальный пейзаж создают песчаные косы, белые от соли.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Dniester_liman.jpeg",
+        "difficulty": "Легкая"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.25,
+          46.05
         ]
       }
     }
